@@ -36,6 +36,7 @@ import androidx.compose.material.icons.filled.PlaylistAdd
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.ShoppingCart
+import androidx.compose.material.icons.filled.Storefront
 import androidx.compose.material3.Badge
 import androidx.compose.material3.BadgedBox
 import androidx.compose.material3.DrawerValue
@@ -88,6 +89,7 @@ import com.example.ui.screens.SettingsScreen
 import com.example.ui.theme.BrandBluePrimary
 import com.example.ui.theme.DangerRed
 import com.example.ui.theme.EmeraldAccent
+import com.example.ui.theme.FintechEmerald
 import com.example.ui.theme.VendoraTheme
 import com.example.ui.theme.WarningAmber
 import com.example.ui.viewmodel.VendoraViewModel
