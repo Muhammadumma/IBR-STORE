@@ -1,0 +1,6 @@
+{
+  "name": "IBR SHOP",
+  "description": "IBR SHOP — Smart Shop Management System with POS, real-time inventory tracking, purchases, debt management, and AI predictive analytics.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
