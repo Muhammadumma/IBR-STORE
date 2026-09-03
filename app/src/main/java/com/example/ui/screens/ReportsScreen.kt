@@ -126,51 +126,55 @@ fun ReportsScreen(viewModel: VendoraViewModel) {
     ) {
         // Header
         item {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Column(modifier = Modifier.weight(1f).padding(end = 8.dp)) {
-                    Text(
-                        text = "Business Reports",
-                        fontSize = 20.sp,
-                        fontWeight = FontWeight.Black,
-                        color = MaterialTheme.colorScheme.onBackground
-                    )
-                    Text(
-                        text = "Financial breakdown, margins & CSV exports.",
-                        fontSize = 12.sp,
-                        color = TextSecondary
-                    )
-                }
-
-                Button(
-                    onClick = {
-                        val csv = buildString {
-                            appendLine("ReceiptID,Date,Customer,Phone,Method,Subtotal,VAT,Total,Profit")
-                            filteredSales.forEach {
-                                appendLine("${it.id},${it.date},${it.customerName},${it.customerPhone},${it.paymentMethod},${it.subtotal},${it.vat},${it.total},${it.profit}")
-                            }
-                        }
-                        val sendIntent = Intent().apply {
-                            action = Intent.ACTION_SEND
-                            putExtra(Intent.EXTRA_TEXT, csv)
-                            type = "text/csv"
-                        }
-                        context.startActivity(Intent.createChooser(sendIntent, "Export Report CSV"))
-                    },
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = FintechEmerald,
-                        contentColor = Color.White
-                    ),
-                    shape = RoundedCornerShape(50.dp),
-                    contentPadding = PaddingValues(horizontal = 14.dp, vertical = 10.dp),
-                    modifier = Modifier.testTag("export_csv_btn")
+            Column(modifier = Modifier.fillMaxWidth()) {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Icon(Icons.Default.CloudDownload, contentDescription = null, modifier = Modifier.size(16.dp))
-                    Spacer(modifier = Modifier.width(6.dp))
-                    Text("Export", fontSize = 12.sp, fontWeight = FontWeight.Bold, softWrap = false)
+                    Column(modifier = Modifier.weight(1f)) {
+                        Text(
+                            text = "Business Reports",
+                            fontSize = 20.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = MaterialTheme.colorScheme.onBackground
+                        )
+                        Text(
+                            text = "Financial breakdown, margins & CSV exports",
+                            fontSize = 12.sp,
+                            color = TextSecondary
+                        )
+                    }
+
+                    Spacer(modifier = Modifier.width(8.dp))
+
+                    Button(
+                        onClick = {
+                            val csv = buildString {
+                                appendLine("ReceiptID,Date,Customer,Phone,Method,Subtotal,VAT,Total,Profit")
+                                filteredSales.forEach {
+                                    appendLine("${it.id},${it.date},${it.customerName},${it.customerPhone},${it.paymentMethod},${it.subtotal},${it.vat},${it.total},${it.profit}")
+                                }
+                            }
+                            val sendIntent = Intent().apply {
+                                action = Intent.ACTION_SEND
+                                putExtra(Intent.EXTRA_TEXT, csv)
+                                type = "text/csv"
+                            }
+                            context.startActivity(Intent.createChooser(sendIntent, "Export Report CSV"))
+                        },
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = FintechEmerald,
+                            contentColor = Color.White
+                        ),
+                        shape = RoundedCornerShape(12.dp),
+                        contentPadding = PaddingValues(horizontal = 14.dp, vertical = 8.dp),
+                        modifier = Modifier.defaultMinSize(minWidth = 100.dp).testTag("export_csv_btn")
+                    ) {
+                        Icon(Icons.Default.CloudDownload, contentDescription = null, modifier = Modifier.size(16.dp))
+                        Spacer(modifier = Modifier.width(6.dp))
+                        Text("Export", fontSize = 12.sp, fontWeight = FontWeight.SemiBold, softWrap = false)
+                    }
                 }
             }
         }
@@ -179,14 +183,14 @@ fun ReportsScreen(viewModel: VendoraViewModel) {
         item {
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(6.dp)
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 listOf("Daily", "Weekly", "Monthly", "All Time").forEach { period ->
                     val isSelected = selectedPeriod == period
                     Surface(
-                        shape = RoundedCornerShape(50.dp),
+                        shape = RoundedCornerShape(10.dp),
                         color = if (isSelected) FintechEmerald else MaterialTheme.colorScheme.surfaceVariant,
-                        border = if (isSelected) null else BorderStroke(1.dp, MaterialTheme.colorScheme.outline),
+                        border = if (isSelected) null else BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant),
                         modifier = Modifier
                             .weight(1f)
                             .clickable { selectedPeriod = period }
@@ -197,7 +201,7 @@ fun ReportsScreen(viewModel: VendoraViewModel) {
                         ) {
                             Text(
                                 text = period,
-                                fontSize = 12.sp,
+                                fontSize = 11.sp,
                                 fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Medium,
                                 color = if (isSelected) Color.White else MaterialTheme.colorScheme.onSurface
                             )
@@ -309,21 +313,36 @@ fun ReportsScreen(viewModel: VendoraViewModel) {
                 Card(
                     shape = RoundedCornerShape(16.dp),
                     colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
-                    border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline),
+                    border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant),
+                    elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
                     modifier = Modifier.fillMaxWidth().padding(vertical = 16.dp)
                 ) {
                     Column(
-                        modifier = Modifier.padding(24.dp),
+                        modifier = Modifier.padding(28.dp),
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
-                        Text("📊", fontSize = 36.sp)
-                        Spacer(modifier = Modifier.height(6.dp))
+                        Surface(
+                            shape = CircleShape,
+                            color = FintechEmerald.copy(alpha = 0.10f),
+                            modifier = Modifier.size(52.dp)
+                        ) {
+                            Box(contentAlignment = Alignment.Center) {
+                                Icon(
+                                    Icons.Default.CloudDownload,
+                                    contentDescription = null,
+                                    tint = FintechEmerald,
+                                    modifier = Modifier.size(24.dp)
+                                )
+                            }
+                        }
+                        Spacer(modifier = Modifier.height(12.dp))
                         Text(
                             text = "No transactions found",
                             fontWeight = FontWeight.Bold,
                             fontSize = 14.sp,
                             color = MaterialTheme.colorScheme.onSurface
                         )
+                        Spacer(modifier = Modifier.height(4.dp))
                         Text(
                             text = "No sales matching the selected filters.",
                             fontSize = 12.sp,
@@ -345,14 +364,14 @@ fun ReportMetricCard(label: String, value: String, accentColor: Color, modifier:
     Card(
         shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
-        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline),
-        elevation = CardDefaults.cardElevation(defaultElevation = 1.dp),
+        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant),
+        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
         modifier = modifier
     ) {
         Column(modifier = Modifier.padding(14.dp)) {
             Text(label, fontSize = 11.sp, fontWeight = FontWeight.Medium, color = TextSecondary)
             Spacer(modifier = Modifier.height(6.dp))
-            Text(value, fontSize = 17.sp, fontWeight = FontWeight.Black, color = accentColor)
+            Text(value, fontSize = 17.sp, fontWeight = FontWeight.Bold, color = accentColor)
         }
     }
 }

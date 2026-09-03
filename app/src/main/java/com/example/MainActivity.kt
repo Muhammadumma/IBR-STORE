@@ -153,31 +153,36 @@ fun VendoraApp(viewModel: VendoraViewModel) {
                         modifier = Modifier.padding(vertical = 12.dp)
                     ) {
                         Surface(
-                            shape = RoundedCornerShape(12.dp),
-                            color = EmeraldAccent.copy(alpha = 0.2f),
-                            modifier = Modifier.size(48.dp)
+                            shape = RoundedCornerShape(14.dp),
+                            color = FintechEmerald.copy(alpha = 0.12f),
+                            modifier = Modifier.size(44.dp)
                         ) {
                             Box(contentAlignment = Alignment.Center) {
-                                Text("🛍️", fontSize = 24.sp)
+                                Icon(
+                                    Icons.Default.Storefront,
+                                    contentDescription = null,
+                                    tint = FintechEmerald,
+                                    modifier = Modifier.size(24.dp)
+                                )
                             }
                         }
                         Column {
                             Text(
                                 text = appSettings?.businessName ?: "IBR SHOP",
-                                fontSize = 18.sp,
-                                fontWeight = FontWeight.Black,
+                                fontSize = 17.sp,
+                                fontWeight = FontWeight.Bold,
                                 color = MaterialTheme.colorScheme.onSurface
                             )
                             Text(
                                 text = "Intelligent POS & Inventory",
                                 fontSize = 11.sp,
-                                color = EmeraldAccent,
-                                fontWeight = FontWeight.SemiBold
+                                color = FintechEmerald,
+                                fontWeight = FontWeight.Medium
                             )
                         }
                     }
 
-                    HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp))
+                    HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp), color = MaterialTheme.colorScheme.outlineVariant)
 
                     // Menu Items
                     val menuItems = listOf(
@@ -202,14 +207,14 @@ fun VendoraApp(viewModel: VendoraViewModel) {
                         }
 
                         NavigationDrawerItem(
-                            label = { Text(screen.title, fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal) },
+                            label = { Text(screen.title, fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Medium) },
                             icon = { Icon(screen.icon, contentDescription = screen.title) },
                             selected = isSelected,
                             badge = if (badgeText != null) {
                                 {
                                     Surface(
-                                        shape = RoundedCornerShape(10.dp),
-                                        color = if (screen == VendoraScreen.DebtManager) WarningAmber else (if (screen == VendoraScreen.Inventory) DangerRed else EmeraldAccent)
+                                        shape = RoundedCornerShape(8.dp),
+                                        color = if (screen == VendoraScreen.DebtManager) WarningAmber else (if (screen == VendoraScreen.Inventory) DangerRed else FintechEmerald)
                                     ) {
                                         Text(
                                             badgeText,
@@ -226,9 +231,9 @@ fun VendoraApp(viewModel: VendoraViewModel) {
                                 scope.launch { drawerState.close() }
                             },
                             colors = NavigationDrawerItemDefaults.colors(
-                                selectedContainerColor = EmeraldAccent.copy(alpha = 0.2f),
-                                selectedIconColor = EmeraldAccent,
-                                selectedTextColor = EmeraldAccent
+                                selectedContainerColor = FintechEmerald.copy(alpha = 0.12f),
+                                selectedIconColor = FintechEmerald,
+                                selectedTextColor = FintechEmerald
                             ),
                             shape = RoundedCornerShape(10.dp),
                             modifier = Modifier.padding(vertical = 2.dp).testTag("drawer_item_${screen.name.lowercase()}")
@@ -239,16 +244,21 @@ fun VendoraApp(viewModel: VendoraViewModel) {
 
                     // Bottom info
                     Surface(
-                        shape = RoundedCornerShape(10.dp),
+                        shape = RoundedCornerShape(12.dp),
                         color = MaterialTheme.colorScheme.surfaceVariant,
                         modifier = Modifier.fillMaxWidth()
                     ) {
                         Row(
-                            modifier = Modifier.padding(10.dp),
+                            modifier = Modifier.padding(12.dp),
                             verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.spacedBy(8.dp)
+                            horizontalArrangement = Arrangement.spacedBy(10.dp)
                         ) {
-                            Text("🛡️", fontSize = 16.sp)
+                            Icon(
+                                Icons.Default.Dashboard,
+                                contentDescription = null,
+                                tint = FintechEmerald,
+                                modifier = Modifier.size(20.dp)
+                            )
                             Column {
                                 Text("Offline First", fontSize = 11.sp, fontWeight = FontWeight.Bold)
                                 Text("Room Database + Gemini AI", fontSize = 10.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
@@ -347,18 +357,27 @@ fun VendoraApp(viewModel: VendoraViewModel) {
                                     }
                                 },
                                 label = {
+                                    val bottomLabel = when (screen) {
+                                        VendoraScreen.Dashboard -> "Home"
+                                        VendoraScreen.Sell -> "POS"
+                                        VendoraScreen.Inventory -> "Stock"
+                                        VendoraScreen.DebtManager -> "Debts"
+                                        VendoraScreen.AiAnalytics -> "Insights"
+                                        else -> screen.title
+                                    }
                                     Text(
-                                        screen.title,
-                                        fontSize = 10.sp,
-                                        fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Medium
+                                        bottomLabel,
+                                        fontSize = 11.sp,
+                                        fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Medium,
+                                        maxLines = 1
                                     )
                                 },
                                 colors = NavigationBarItemDefaults.colors(
-                                    selectedIconColor = EmeraldAccent,
-                                    selectedTextColor = EmeraldAccent,
-                                    indicatorColor = EmeraldAccent.copy(alpha = 0.12f),
-                                    unselectedIconColor = Color(0xFF9CA3AF),
-                                    unselectedTextColor = Color(0xFF9CA3AF)
+                                    selectedIconColor = FintechEmerald,
+                                    selectedTextColor = FintechEmerald,
+                                    indicatorColor = FintechEmerald.copy(alpha = 0.12f),
+                                    unselectedIconColor = Color(0xFF94A3B8),
+                                    unselectedTextColor = Color(0xFF94A3B8)
                                 ),
                                 modifier = Modifier.testTag("bottom_nav_${screen.name.lowercase()}")
                             )
