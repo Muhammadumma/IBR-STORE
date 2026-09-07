@@ -29,7 +29,7 @@ class VendoraRepository(context: Context) {
         context.applicationContext,
         VendoraDatabase::class.java,
         "vendora_shop.db"
-    ).fallbackToDestructiveMigration().build()
+    ).fallbackToDestructiveMigration(true).build()
 
     private val productDao = db.productDao()
     private val saleDao = db.saleDao()

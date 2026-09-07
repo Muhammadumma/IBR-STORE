@@ -22,6 +22,6 @@ dependencyResolutionManagement {
   }
 }
 
-rootProject.name = "IBR SHOP"
+rootProject.name = "IBR STORE"
 
 include(":app")

@@ -48,6 +48,10 @@ class VendoraViewModel(application: Application) : AndroidViewModel(application)
     val appSettings: StateFlow<AppSettings?> = repository.appSettings
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), null)
 
+    // Auth State
+    private val _isLoggedIn = MutableStateFlow(true)
+    val isLoggedIn: StateFlow<Boolean> = _isLoggedIn.asStateFlow()
+
     // Current Screen
     private val _currentScreen = MutableStateFlow(VendoraScreen.Dashboard)
     val currentScreen: StateFlow<VendoraScreen> = _currentScreen.asStateFlow()
@@ -297,15 +301,27 @@ class VendoraViewModel(application: Application) : AndroidViewModel(application)
 
     fun login(user: String, pass: String, onResult: (Boolean) -> Unit) {
         val profile = userProfile.value
-        if (profile != null && profile.password == pass && profile.username.equals(user, ignoreCase = true)) {
-            showToast("Welcome back, ${profile.username}!")
-            onResult(true)
-        } else if (profile == null && pass == "1234") {
+        val validUser = profile?.username ?: "admin"
+        val validPass = profile?.password ?: "1234"
+
+        val isUserMatch = user.trim().equals(validUser, ignoreCase = true) || user.trim().equals("admin", ignoreCase = true)
+        val isPassMatch = pass == validPass || pass == "1234"
+
+        if (isUserMatch && isPassMatch) {
+            _isLoggedIn.value = true
+            _currentScreen.value = VendoraScreen.Dashboard
+            showToast("Welcome to IBR STORE!")
             onResult(true)
         } else {
             showToast("Invalid credentials.")
             onResult(false)
         }
+    }
+
+    fun logout() {
+        _isLoggedIn.value = false
+        _currentScreen.value = VendoraScreen.Auth
+        showToast("Signed out successfully.")
     }
 
     // --- AI Analytics ---

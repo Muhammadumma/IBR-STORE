@@ -98,7 +98,7 @@ fun ReceiptDialog(
 
                 // Business Logo & Info
                 Text(
-                    text = settings?.businessName ?: "IBR SHOP",
+                    text = settings?.businessName ?: "IBR STORE",
                     fontSize = 20.sp,
                     fontWeight = FontWeight.Black,
                     color = Color.Black,
@@ -280,7 +280,7 @@ fun ReceiptDialog(
                     OutlinedButton(
                         onClick = {
                             val shareText = buildString {
-                                appendLine("=== ${settings?.businessName ?: "IBR SHOP"} ===")
+                                appendLine("=== ${settings?.businessName ?: "IBR STORE"} ===")
                                 appendLine("Receipt #${sale.id.takeLast(8)}")
                                 appendLine("Date: ${sale.date}")
                                 appendLine("Payment: ${sale.paymentMethod}")

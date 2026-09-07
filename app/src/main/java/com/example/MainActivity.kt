@@ -36,7 +36,6 @@ import androidx.compose.material.icons.filled.PlaylistAdd
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.ShoppingCart
-import androidx.compose.material.icons.filled.Storefront
 import androidx.compose.material3.Badge
 import androidx.compose.material3.BadgedBox
 import androidx.compose.material3.DrawerValue
@@ -86,10 +85,12 @@ import com.example.ui.screens.PurchasesScreen
 import com.example.ui.screens.ReceiptDialog
 import com.example.ui.screens.ReportsScreen
 import com.example.ui.screens.SettingsScreen
+import androidx.compose.material.icons.filled.ExitToApp
+import com.example.ui.components.IbrLogoView
+import com.example.ui.screens.LoginScreen
 import com.example.ui.theme.BrandBluePrimary
 import com.example.ui.theme.DangerRed
 import com.example.ui.theme.EmeraldAccent
-import com.example.ui.theme.FintechEmerald
 import com.example.ui.theme.VendoraTheme
 import com.example.ui.theme.WarningAmber
 import com.example.ui.viewmodel.VendoraViewModel
@@ -114,6 +115,7 @@ class MainActivity : ComponentActivity() {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun VendoraApp(viewModel: VendoraViewModel) {
+    val isLoggedIn by viewModel.isLoggedIn.collectAsStateWithLifecycle()
     val currentScreen by viewModel.currentScreen.collectAsStateWithLifecycle()
     val cart by viewModel.cart.collectAsStateWithLifecycle()
     val activeReceiptSale by viewModel.activeReceiptSale.collectAsStateWithLifecycle()
@@ -133,6 +135,11 @@ fun VendoraApp(viewModel: VendoraViewModel) {
         }
     }
 
+    if (!isLoggedIn) {
+        LoginScreen(viewModel = viewModel)
+        return
+    }
+
     val lowStockCount = remember(products) { products.count { it.qty < 5 } }
     val unpaidDebtsCount = remember(debts) { debts.count { it.status != "Paid" } }
 
@@ -148,43 +155,30 @@ fun VendoraApp(viewModel: VendoraViewModel) {
                         .fillMaxSize()
                         .padding(16.dp)
                 ) {
-                    // Drawer Header
+                    // Drawer Header with IBR Logo
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.spacedBy(12.dp),
                         modifier = Modifier.padding(vertical = 12.dp)
                     ) {
-                        Surface(
-                            shape = RoundedCornerShape(14.dp),
-                            color = FintechEmerald.copy(alpha = 0.12f),
-                            modifier = Modifier.size(44.dp)
-                        ) {
-                            Box(contentAlignment = Alignment.Center) {
-                                Icon(
-                                    Icons.Default.Storefront,
-                                    contentDescription = null,
-                                    tint = FintechEmerald,
-                                    modifier = Modifier.size(24.dp)
-                                )
-                            }
-                        }
+                        IbrLogoView(size = 44.dp)
                         Column {
                             Text(
-                                text = appSettings?.businessName ?: "IBR SHOP",
-                                fontSize = 17.sp,
-                                fontWeight = FontWeight.Bold,
+                                text = appSettings?.businessName ?: "IBR STORE",
+                                fontSize = 18.sp,
+                                fontWeight = FontWeight.Black,
                                 color = MaterialTheme.colorScheme.onSurface
                             )
                             Text(
                                 text = "Intelligent POS & Inventory",
                                 fontSize = 11.sp,
-                                color = FintechEmerald,
-                                fontWeight = FontWeight.Medium
+                                color = EmeraldAccent,
+                                fontWeight = FontWeight.SemiBold
                             )
                         }
                     }
 
-                    HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp), color = MaterialTheme.colorScheme.outlineVariant)
+                    HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp))
 
                     // Menu Items
                     val menuItems = listOf(
@@ -209,14 +203,14 @@ fun VendoraApp(viewModel: VendoraViewModel) {
                         }
 
                         NavigationDrawerItem(
-                            label = { Text(screen.title, fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Medium) },
+                            label = { Text(screen.title, fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal) },
                             icon = { Icon(screen.icon, contentDescription = screen.title) },
                             selected = isSelected,
                             badge = if (badgeText != null) {
                                 {
                                     Surface(
-                                        shape = RoundedCornerShape(8.dp),
-                                        color = if (screen == VendoraScreen.DebtManager) WarningAmber else (if (screen == VendoraScreen.Inventory) DangerRed else FintechEmerald)
+                                        shape = RoundedCornerShape(10.dp),
+                                        color = if (screen == VendoraScreen.DebtManager) WarningAmber else (if (screen == VendoraScreen.Inventory) DangerRed else EmeraldAccent)
                                     ) {
                                         Text(
                                             badgeText,
@@ -233,34 +227,43 @@ fun VendoraApp(viewModel: VendoraViewModel) {
                                 scope.launch { drawerState.close() }
                             },
                             colors = NavigationDrawerItemDefaults.colors(
-                                selectedContainerColor = FintechEmerald.copy(alpha = 0.12f),
-                                selectedIconColor = FintechEmerald,
-                                selectedTextColor = FintechEmerald
+                                selectedContainerColor = EmeraldAccent.copy(alpha = 0.2f),
+                                selectedIconColor = EmeraldAccent,
+                                selectedTextColor = EmeraldAccent
                             ),
                             shape = RoundedCornerShape(10.dp),
                             modifier = Modifier.padding(vertical = 2.dp).testTag("drawer_item_${screen.name.lowercase()}")
                         )
                     }
 
+                    HorizontalDivider(modifier = Modifier.padding(vertical = 6.dp))
+
+                    NavigationDrawerItem(
+                        label = { Text("Sign Out", color = DangerRed, fontWeight = FontWeight.Bold) },
+                        icon = { Icon(Icons.Default.ExitToApp, contentDescription = "Sign Out", tint = DangerRed) },
+                        selected = false,
+                        onClick = {
+                            scope.launch { drawerState.close() }
+                            viewModel.logout()
+                        },
+                        shape = RoundedCornerShape(10.dp),
+                        modifier = Modifier.padding(vertical = 2.dp).testTag("drawer_sign_out")
+                    )
+
                     Spacer(modifier = Modifier.weight(1f))
 
                     // Bottom info
                     Surface(
-                        shape = RoundedCornerShape(12.dp),
+                        shape = RoundedCornerShape(10.dp),
                         color = MaterialTheme.colorScheme.surfaceVariant,
                         modifier = Modifier.fillMaxWidth()
                     ) {
                         Row(
-                            modifier = Modifier.padding(12.dp),
+                            modifier = Modifier.padding(10.dp),
                             verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.spacedBy(10.dp)
+                            horizontalArrangement = Arrangement.spacedBy(8.dp)
                         ) {
-                            Icon(
-                                Icons.Default.Dashboard,
-                                contentDescription = null,
-                                tint = FintechEmerald,
-                                modifier = Modifier.size(20.dp)
-                            )
+                            Text("🛡️", fontSize = 16.sp)
                             Column {
                                 Text("Offline First", fontSize = 11.sp, fontWeight = FontWeight.Bold)
                                 Text("Room Database + Gemini AI", fontSize = 10.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
@@ -359,27 +362,18 @@ fun VendoraApp(viewModel: VendoraViewModel) {
                                     }
                                 },
                                 label = {
-                                    val bottomLabel = when (screen) {
-                                        VendoraScreen.Dashboard -> "Home"
-                                        VendoraScreen.Sell -> "POS"
-                                        VendoraScreen.Inventory -> "Stock"
-                                        VendoraScreen.DebtManager -> "Debts"
-                                        VendoraScreen.AiAnalytics -> "Insights"
-                                        else -> screen.title
-                                    }
                                     Text(
-                                        bottomLabel,
-                                        fontSize = 11.sp,
-                                        fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Medium,
-                                        maxLines = 1
+                                        screen.title,
+                                        fontSize = 10.sp,
+                                        fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Medium
                                     )
                                 },
                                 colors = NavigationBarItemDefaults.colors(
-                                    selectedIconColor = FintechEmerald,
-                                    selectedTextColor = FintechEmerald,
-                                    indicatorColor = FintechEmerald.copy(alpha = 0.12f),
-                                    unselectedIconColor = Color(0xFF94A3B8),
-                                    unselectedTextColor = Color(0xFF94A3B8)
+                                    selectedIconColor = EmeraldAccent,
+                                    selectedTextColor = EmeraldAccent,
+                                    indicatorColor = EmeraldAccent.copy(alpha = 0.12f),
+                                    unselectedIconColor = Color(0xFF9CA3AF),
+                                    unselectedTextColor = Color(0xFF9CA3AF)
                                 ),
                                 modifier = Modifier.testTag("bottom_nav_${screen.name.lowercase()}")
                             )
@@ -410,7 +404,7 @@ fun VendoraApp(viewModel: VendoraViewModel) {
                         VendoraScreen.Reports -> ReportsScreen(viewModel = viewModel)
                         VendoraScreen.Settings -> SettingsScreen(viewModel = viewModel)
                         VendoraScreen.Search -> GlobalSearchScreen(viewModel = viewModel)
-                        VendoraScreen.Auth -> SettingsScreen(viewModel = viewModel)
+                        VendoraScreen.Auth -> LoginScreen(viewModel = viewModel)
                     }
                 }
             }

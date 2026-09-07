@@ -67,6 +67,9 @@ import com.example.ui.theme.FintechEmerald
 import com.example.ui.theme.SuccessGreen
 import com.example.ui.viewmodel.VendoraViewModel
 
+import androidx.compose.material.icons.filled.ExitToApp
+import com.example.ui.components.IbrLogoView
+
 @Composable
 fun SettingsScreen(viewModel: VendoraViewModel) {
     val context = LocalContext.current
@@ -76,7 +79,7 @@ fun SettingsScreen(viewModel: VendoraViewModel) {
     val sales by viewModel.sales.collectAsStateWithLifecycle()
     val debts by viewModel.debts.collectAsStateWithLifecycle()
 
-    var businessName by remember(appSettings) { mutableStateOf(appSettings?.businessName ?: "IBR SHOP") }
+    var businessName by remember(appSettings) { mutableStateOf(appSettings?.businessName ?: "IBR STORE") }
     var businessAddress by remember(appSettings) { mutableStateOf(appSettings?.businessAddress ?: "Main Market Plaza, Suite 4B") }
     var businessPhone by remember(appSettings) { mutableStateOf(appSettings?.businessPhone ?: "+234 800 000 0000") }
     var receiptFooter by remember(appSettings) { mutableStateOf(appSettings?.receiptFooter ?: "Thank you for your patronage! Goods sold in good condition.") }
@@ -122,36 +125,54 @@ fun SettingsScreen(viewModel: VendoraViewModel) {
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Row(
-                    modifier = Modifier.padding(16.dp),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(16.dp),
                     verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(14.dp)
+                    horizontalArrangement = Arrangement.SpaceBetween
                 ) {
-                    Box(
-                        modifier = Modifier
-                            .size(54.dp)
-                            .background(EmeraldAccent.copy(alpha = 0.2f), CircleShape),
-                        contentAlignment = Alignment.Center
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(14.dp),
+                        modifier = Modifier.weight(1f)
                     ) {
-                        Text(text = "👑", fontSize = 28.sp)
+                        IbrLogoView(size = 52.dp)
+                        Column {
+                            Text(
+                                text = userProfile?.username ?: "admin",
+                                fontSize = 16.sp,
+                                fontWeight = FontWeight.Bold,
+                                color = MaterialTheme.colorScheme.onSurface
+                            )
+                            Text(
+                                text = businessName,
+                                fontSize = 13.sp,
+                                color = EmeraldAccent,
+                                fontWeight = FontWeight.SemiBold
+                            )
+                            Text(
+                                text = "Superuser • Active Session",
+                                fontSize = 11.sp,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                            )
+                        }
                     }
-                    Column {
-                        Text(
-                            text = userProfile?.username ?: "Admin Manager",
-                            fontSize = 16.sp,
-                            fontWeight = FontWeight.Bold,
-                            color = MaterialTheme.colorScheme.onSurface
-                        )
-                        Text(
-                            text = businessName,
-                            fontSize = 13.sp,
-                            color = EmeraldAccent,
-                            fontWeight = FontWeight.SemiBold
-                        )
-                        Text(
-                            text = "Superuser • Offline Database Active",
-                            fontSize = 11.sp,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant
-                        )
+
+                    Surface(
+                        shape = RoundedCornerShape(20.dp),
+                        color = Color(0xFFEF4444).copy(alpha = 0.15f),
+                        modifier = Modifier
+                            .clickable { viewModel.logout() }
+                            .testTag("settings_sign_out_btn")
+                    ) {
+                        Row(
+                            modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Icon(Icons.Default.ExitToApp, contentDescription = "Sign Out", tint = Color(0xFFEF4444), modifier = Modifier.size(14.dp))
+                            Spacer(modifier = Modifier.width(4.dp))
+                            Text("Sign Out", fontSize = 11.sp, fontWeight = FontWeight.Bold, color = Color(0xFFEF4444))
+                        }
                     }
                 }
             }
@@ -612,11 +633,11 @@ fun SettingsScreen(viewModel: VendoraViewModel) {
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Icon(Icons.Default.Info, contentDescription = null, tint = FintechEmerald, modifier = Modifier.size(20.dp))
                         Spacer(modifier = Modifier.width(8.dp))
-                        Text("About IBR SHOP", fontWeight = FontWeight.Bold, fontSize = 15.sp)
+                        Text("About IBR STORE", fontWeight = FontWeight.Bold, fontSize = 15.sp)
                     }
                     Spacer(modifier = Modifier.height(6.dp))
                     Text(
-                        "IBR SHOP v2.5.0 • Intelligent POS, Stock Inventory, Debt Tracker & Predictive Analytics Engine. Powered by Room Database and Gemini AI.",
+                        "IBR STORE v2.5.0 • Intelligent POS, Stock Inventory, Debt Tracker & Predictive Analytics Engine. Powered by Room Database and Gemini AI.",
                         fontSize = 12.sp,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                         lineHeight = 16.sp

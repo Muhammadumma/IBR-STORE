@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/android"
+    android:width="200dp"
+    android:height="200dp"
+    android:viewportWidth="200.0"
+    android:viewportHeight="200.0">
+
+    <!-- Dark Background Canvas -->
+    <path
+        android:fillColor="#0D0E15"
+        android:pathData="M0,0h200v200h-200z" />
+
+    <!-- Outer Cyan Accent Orbit Shadow Line -->
+    <path
+        android:strokeColor="#00A8FF"
+        android:strokeWidth="3"
+        android:fillColor="@android:color/transparent"
+        android:pathData="M15,100 C15,35 70,12 145,18 C180,21 190,40 185,60 C178,85 130,120 70,150 C30,170 12,140 15,100 Z" />
+
+    <!-- Main Vibrant Red Swoosh Ring -->
+    <path
+        android:fillColor="#FF1E42"
+        android:pathData="M18,95 C15,40 75,18 140,24 C172,27 182,45 176,62 C168,85 118,122 65,148 C32,164 16,132 18,95 Z M32,96 C30,122 42,142 66,132 C110,110 152,78 160,60 C164,48 156,36 134,34 C82,29 34,48 32,96 Z" />
+
+    <!-- Cyan Text: Letter 'I' -->
+    <path
+        android:fillColor="#00A8FF"
+        android:pathData="M38,78 h28 v12 h-8 v38 h8 v12 h-28 v-12 h8 v-38 h-8 z" />
+
+    <!-- Cyan Text: Letter 'B' -->
+    <path
+        android:fillColor="#00A8FF"
+        android:pathData="M72,78 h26 c8,0 14,4 14,11 c0,5 -3,9 -8,10 c6,1 10,6 10,12 c0,8 -7,13 -16,13 h-26 z M84,88 v10 h12 c3,0 6,-2 6,-5 c0,-3 -3,-5 -6,-5 z M84,108 v12 h14 c3,0 6,-2 6,-6 c0,-4 -3,-6 -6,-6 z" />
+
+    <!-- Cyan Text: Letter 'R' -->
+    <path
+        android:fillColor="#00A8FF"
+        android:pathData="M122,78 h26 c8,0 14,5 14,12 c0,6 -4,10 -10,11 l12,19 h-14 l-10,-17 h-6 v17 h-12 z M134,88 v10 h12 c3,0 6,-2 6,-5 c0,-3 -3,-5 -6,-5 z" />
+
+</vector>

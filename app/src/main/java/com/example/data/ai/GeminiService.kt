@@ -95,7 +95,7 @@ object GeminiService {
         val url = "https://generativelanguage.googleapis.com/v1beta/models/$model:generateContent?key=$apiKey"
 
         val systemPrompt = """
-            You are the expert retail business analyst and predictive inventory strategist for IBR SHOP Manager.
+            You are the expert retail business analyst and predictive inventory strategist for IBR STORE Manager.
             Below is the real-time store performance data context:
             $businessContext
             

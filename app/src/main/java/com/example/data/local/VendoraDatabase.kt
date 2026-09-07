@@ -120,7 +120,7 @@ interface AppSettingsDao {
         UserProfile::class,
         AppSettings::class
     ],
-    version = 1,
+    version = 2,
     exportSchema = false
 )
 abstract class VendoraDatabase : RoomDatabase() {

@@ -146,7 +146,7 @@ fun DashboardScreen(viewModel: VendoraViewModel) {
                     }
                     Spacer(modifier = Modifier.height(16.dp))
                     Text(
-                        text = "Welcome to ${appSettings?.businessName ?: "IBR SHOP"}",
+                        text = "Welcome to ${appSettings?.businessName ?: "IBR STORE"}",
                         fontSize = 20.sp,
                         fontWeight = FontWeight.Black,
                         color = MaterialTheme.colorScheme.onSurface

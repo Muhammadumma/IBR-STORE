@@ -5,7 +5,7 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "products")
 data class Product(
-    @PrimaryKey val id: String = System.currentTimeMillis().toString(),
+    @PrimaryKey val id: String = java.util.UUID.randomUUID().toString(),
     val name: String,
     val category: String = "General",
     val qty: Int = 0,
@@ -24,7 +24,7 @@ data class CartItem(
 
 @Entity(tableName = "sales")
 data class Sale(
-    @PrimaryKey val id: String = "SALE-" + System.currentTimeMillis(),
+    @PrimaryKey val id: String = "SALE-" + java.util.UUID.randomUUID().toString().take(8),
     val date: String = java.text.SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", java.util.Locale.getDefault()).format(java.util.Date()),
     val customerName: String = "Walk-in Customer",
     val customerPhone: String = "",
@@ -40,7 +40,7 @@ data class Sale(
 
 @Entity(tableName = "purchases")
 data class Purchase(
-    @PrimaryKey val id: String = "PUR-" + System.currentTimeMillis(),
+    @PrimaryKey val id: String = "PUR-" + java.util.UUID.randomUUID().toString().take(8),
     val productId: String,
     val productName: String,
     val qty: Int,
@@ -55,7 +55,7 @@ data class OverdueReason(
 
 @Entity(tableName = "debts")
 data class Debt(
-    @PrimaryKey val id: String = "DEBT-" + System.currentTimeMillis(),
+    @PrimaryKey val id: String = "DEBT-" + java.util.UUID.randomUUID().toString().take(8),
     val debtor: String,
     val phone: String = "",
     val product: String,
@@ -72,7 +72,7 @@ data class Debt(
 
 @Entity(tableName = "audit_logs")
 data class AuditLog(
-    @PrimaryKey val id: String = "LOG-" + System.currentTimeMillis(),
+    @PrimaryKey val id: String = "LOG-" + java.util.UUID.randomUUID().toString().take(8),
     val timestamp: String = java.text.SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", java.util.Locale.getDefault()).format(java.util.Date()),
     val user: String = "Admin",
     val action: String = "Update",
@@ -101,7 +101,7 @@ data class UserProfile(
 @Entity(tableName = "app_settings")
 data class AppSettings(
     @PrimaryKey val id: Int = 1,
-    val businessName: String = "IBR SHOP",
+    val businessName: String = "IBR STORE",
     val businessAddress: String = "123 Business Street, Lagos",
     val businessPhone: String = "+234 800 000 0000",
     val receiptFooter: String = "Thank you for your patronage! Goods bought in good condition are not returnable.",
